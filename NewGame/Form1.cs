@@ -144,6 +144,15 @@ namespace NewGame
             {
                 jumpSpeed = 10;
             }
+            if (goRight && background.Left > -635)
+            {
+                backgroud.Left -= backgroundSpeed;
+
+            }
+            if (goLeft && background.Left < 0)
+            {
+                backgroud.Left += backgroundSpeed;
+            }
 
             foreach (Control x in this.Controls)
             {
@@ -194,36 +203,10 @@ namespace NewGame
                     {
                         gameTimer.Stop();
                         MessageBox.Show("Вы мертвы!");
-                    }
-                    if (goRight && background.Left > 0)
-                    {
-                        background.Left -= backLeft;
-
-                        foreach (Control x in this.Controls)
-                        {
-                            if (x is PictureBox && (string)x.Tag == "platform" || x is PictureBox && (string)x.Tag == "coin" || x is PictureBox && (string)x.Tag == "door")
-                            {
-                                x.Left -= backLeft;
-                            }
-                        }
-
-                    }
-                    if (goLeft && background.Left < 0)
-                    {
-                        background.Left += backLeft;
-
-
-                        foreach (Control x in this.Controls)
-                        {
-                            if (x is PictureBox && (string)x.Tag == "platform" || x is PictureBox && (string)x.Tag == "coin" || x is PictureBox && (string)x.Tag == "door")
-                            {
-                                x.Left += backLeft;
-                            }
-                        }
-                    }
+                    }                   
                 }
 
-            }
+            }         
             horizontalPlatform.Left -= horizontalSpeed;
 
             if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
