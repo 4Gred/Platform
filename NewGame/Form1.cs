@@ -122,11 +122,11 @@ namespace NewGame
             txtScore.Text = "Score: " + score;
             playAnimationIdle();
             player.Top += jumpSpeed;
-            if (goLeft == true && player.Left > 60)
+            if (goLeft == true && player.Left > 48)
             {              
                 player.Left -= playerSpeed;
             }
-            if (goRight == true && player.Left + (player.Width + 60) < this.ClientSize.Width)
+            if (goRight == true && player.Left + (player.Width + 48) < this.ClientSize.Width)
             {
                 player.Left += playerSpeed;
             }
@@ -239,7 +239,7 @@ namespace NewGame
             {
                 gameTimer.Stop();
                 isGameOver = true;
-                txtScore.Text = "Score: " + score + MessageBox.NewLine + "Вы мертвы!";
+                txtScore.Text = "Score: " + score + MessageBox.Show("Вы мертвы!");
             }
 
             if (player.Bounds.IntersectsWith(door.Bounds) && score > 1)
@@ -263,28 +263,10 @@ namespace NewGame
             goRight = false;
             isGameOver = false;
             score = 0;
-
             txtScore.Text = "Score: " + score;
-
-            foreach (Control x in this.Controls)
-            {
-                if (x is PictureBox && x.Visible == false)
-                {
-                    x.Visible = true;
-                }
-            }          
-            player.Left = 72;
-            player.Top = 475;
-
-            enemyOne.Left = 471;
-            enemyTwo.Left = 360;
-
-            horizontalPlatform.Left = 275;
-            verticalPlatform.Top = 581;
-
-            gameTimer.Start();
-
-
+            Form1 newWindow = new Form1();
+            newWindow.Show();
+            this.Hide();           
         }
         private void MoveGameElements(string direction)
         {

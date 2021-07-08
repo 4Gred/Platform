@@ -388,6 +388,7 @@
             this.door.Size = new System.Drawing.Size(42, 58);
             this.door.TabIndex = 18;
             this.door.TabStop = false;
+            this.door.Tag = "door";
             // 
             // player
             // 
