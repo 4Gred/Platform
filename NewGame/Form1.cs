@@ -116,16 +116,17 @@ namespace NewGame
 
 
         }
+
         private void MainGame(object sender, EventArgs e)
         {
             txtScore.Text = "Score: " + score;
             playAnimationIdle();
             player.Top += jumpSpeed;
-            if (goLeft == true)
+            if (goLeft == true && player.Left > 60)
             {              
                 player.Left -= playerSpeed;
             }
-            if (goRight == true)
+            if (goRight == true && player.Left + (player.Width + 60) < this.ClientSize.Width)
             {
                 player.Left += playerSpeed;
             }
@@ -144,16 +145,18 @@ namespace NewGame
             {
                 jumpSpeed = 10;
             }
-            if (goRight && background.Left > -635)
-            {
-                backgroud.Left -= backgroundSpeed;
-
-            }
             if (goLeft && background.Left < 0)
             {
-                backgroud.Left += backgroundSpeed;
-            }
+                background.Left += backgroundSpeed;
+                MoveGameElements("foward");
 
+            }
+            if (goRight && background.Left > -641)
+            {
+                background.Left -= backgroundSpeed;
+                MoveGameElements("back");
+
+            }          
             foreach (Control x in this.Controls)
             {
                 if (x is PictureBox)
@@ -198,12 +201,7 @@ namespace NewGame
                             isGameOver = true;
                             txtScore.Text = "Score: " + score + MessageBox.Show("Вы убиты!");
                         }
-                    }
-                    if (player.Top + player.Height > this.ClientSize.Height + 60)
-                    {
-                        gameTimer.Stop();
-                        MessageBox.Show("Вы мертвы!");
-                    }                   
+                    }                                   
                 }
 
             }         
@@ -237,11 +235,11 @@ namespace NewGame
             }
 
 
-            if (player.Top + player.Height > this.ClientSize.Height + 50)
+            if (player.Top + player.Height > this.ClientSize.Height + 60)
             {
                 gameTimer.Stop();
                 isGameOver = true;
-                txtScore.Text = "Score: " + score + Environment.NewLine + "Вы мертвы!";
+                txtScore.Text = "Score: " + score + MessageBox.NewLine + "Вы мертвы!";
             }
 
             if (player.Bounds.IntersectsWith(door.Bounds) && score > 1)
@@ -288,8 +286,28 @@ namespace NewGame
 
 
         }
+        private void MoveGameElements(string direction)
+        {
 
-        private void playAnimationIdle()
+            foreach (Control x in this.Controls)
+            {
+                if (x is PictureBox && (string)x.Tag == "platform" || x is PictureBox && (string)x.Tag == "coin" || x is PictureBox && (string)x.Tag == "door" || x is PictureBox && (string)x.Tag == "enemy")
+                {
+
+                    if (direction == "back")
+                    {
+                        x.Left -= backgroundSpeed;
+                    }
+                    if (direction == "forward")
+                    {
+                        x.Left += backgroundSpeed;
+                    }
+
+
+                }
+            }
+        }
+            private void playAnimationIdle()
         {
             if (currAnimation == 0)
             {
