@@ -23,6 +23,7 @@ namespace NewGame
         int force;
         int score = 0;
         int playerSpeed = 7;
+        int backgroundSpeed = 8;
         int horizontalSpeed = 5;
         int verticalSpeed = 3;
         int enemyOneSpeed = 5;
@@ -144,7 +145,7 @@ namespace NewGame
                 jumpSpeed = 10;
             }
 
-            foreach(Control x in this.Controls)
+            foreach (Control x in this.Controls)
             {
                 if (x is PictureBox)
                 {
@@ -186,14 +187,43 @@ namespace NewGame
                         {
                             gameTimer.Stop();
                             isGameOver = true;
-                            txtScore.Text = "Score: " + score + Environment.NewLine + "You were killed in your journey!!";
+                            txtScore.Text = "Score: " + score + MessageBox.Show("Вы убиты!");
                         }
                     }
+                    if (player.Top + player.Height > this.ClientSize.Height + 60)
+                    {
+                        gameTimer.Stop();
+                        MessageBox.Show("Вы мертвы!");
+                    }
+                    if (goRight && background.Left > 0)
+                    {
+                        background.Left -= backLeft;
 
+                        foreach (Control x in this.Controls)
+                        {
+                            if (x is PictureBox && (string)x.Tag == "platform" || x is PictureBox && (string)x.Tag == "coin" || x is PictureBox && (string)x.Tag == "door")
+                            {
+                                x.Left -= backLeft;
+                            }
+                        }
+
+                    }
+                    if (goLeft && background.Left < 0)
+                    {
+                        background.Left += backLeft;
+
+
+                        foreach (Control x in this.Controls)
+                        {
+                            if (x is PictureBox && (string)x.Tag == "platform" || x is PictureBox && (string)x.Tag == "coin" || x is PictureBox && (string)x.Tag == "door")
+                            {
+                                x.Left += backLeft;
+                            }
+                        }
+                    }
                 }
+
             }
-
-
             horizontalPlatform.Left -= horizontalSpeed;
 
             if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
@@ -231,7 +261,7 @@ namespace NewGame
                 txtScore.Text = "Score: " + score + Environment.NewLine + "Вы мертвы!";
             }
 
-            if (player.Bounds.IntersectsWith(door.Bounds) && score == 26)
+            if (player.Bounds.IntersectsWith(door.Bounds) && score > 1)
             {
                 gameTimer.Stop();
                 isGameOver = true;
@@ -239,7 +269,7 @@ namespace NewGame
             }
             else
             {
-                txtScore.Text = "Score: " + score + Environment.NewLine + "Вы собрали все монеты";
+                txtScore.Text = "Score: " + score + Environment.NewLine + "Нужно собрать все монеты";
             }
 
 
