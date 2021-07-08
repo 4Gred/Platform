@@ -39,8 +39,6 @@ namespace NewGame
             timer1.Start();
             this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             player.BackColor = Color.Transparent;
-            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            txtScore.BackColor = Color.Transparent;
 
         }
 
@@ -148,7 +146,7 @@ namespace NewGame
             if (goLeft && background.Left < 0)
             {
                 background.Left += backgroundSpeed;
-                MoveGameElements("foward");
+                MoveGameElements("forward");
 
             }
             if (goRight && background.Left > -641)
@@ -220,7 +218,7 @@ namespace NewGame
             }
 
 
-            enemyOne.Left -= enemyOneSpeed;
+          /*  enemyOne.Left -= enemyOneSpeed;
 
             if (enemyOne.Left < pictureBox5.Left || enemyOne.Left + enemyOne.Width > pictureBox5.Left + pictureBox5.Width)
             {
@@ -232,7 +230,7 @@ namespace NewGame
             if (enemyTwo.Left < pictureBox2.Left || enemyTwo.Left + enemyTwo.Width > pictureBox2.Left + pictureBox2.Width)
             {
                 enemyTwoSpeed = -enemyTwoSpeed;
-            }
+            }*/
 
 
             if (player.Top + player.Height > this.ClientSize.Height + 60)
@@ -246,14 +244,12 @@ namespace NewGame
             {
                 gameTimer.Stop();
                 isGameOver = true;
-                txtScore.Text = "Score: " + score + Environment.NewLine + "Миссия выполнена!";
+                txtScore.Text = "Score: " + score + MessageBox.Show("Миссия выполнена!");
             }
             else
             {
                 txtScore.Text = "Score: " + score + Environment.NewLine + "Нужно собрать все монеты";
             }
-
-
         }
         private void RestartGame()
         {

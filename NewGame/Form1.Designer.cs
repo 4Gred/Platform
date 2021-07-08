@@ -59,7 +59,6 @@
             this.pictureBox18 = new System.Windows.Forms.PictureBox();
             this.door = new System.Windows.Forms.PictureBox();
             this.player = new System.Windows.Forms.PictureBox();
-            this.enemyOne = new System.Windows.Forms.PictureBox();
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
@@ -69,9 +68,10 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.txtScore = new System.Windows.Forms.Label();
-            this.enemyTwo = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.background = new System.Windows.Forms.PictureBox();
+            this.enemyOne = new System.Windows.Forms.PictureBox();
+            this.enemyTwo = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).BeginInit();
@@ -100,7 +100,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox18)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.door)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.enemyOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
@@ -109,8 +108,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.enemyTwo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.background)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyOne)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyTwo)).BeginInit();
             this.SuspendLayout();
             // 
             // gameTimer
@@ -392,22 +392,12 @@
             // 
             // player
             // 
-            this.player.BackColor = System.Drawing.Color.DarkBlue;
+            this.player.BackColor = System.Drawing.Color.Transparent;
             this.player.Location = new System.Drawing.Point(72, 475);
             this.player.Name = "player";
             this.player.Size = new System.Drawing.Size(48, 48);
             this.player.TabIndex = 19;
             this.player.TabStop = false;
-            // 
-            // enemyOne
-            // 
-            this.enemyOne.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.enemyOne.Location = new System.Drawing.Point(464, 242);
-            this.enemyOne.Name = "enemyOne";
-            this.enemyOne.Size = new System.Drawing.Size(30, 40);
-            this.enemyOne.TabIndex = 20;
-            this.enemyOne.TabStop = false;
-            this.enemyOne.Tag = "enemy";
             // 
             // pictureBox8
             // 
@@ -499,6 +489,7 @@
             // 
             // txtScore
             // 
+            this.txtScore.BackColor = System.Drawing.Color.Transparent;
             this.txtScore.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtScore.Location = new System.Drawing.Point(486, 0);
             this.txtScore.Name = "txtScore";
@@ -506,16 +497,6 @@
             this.txtScore.TabIndex = 9;
             this.txtScore.Text = "Score: 0";
             this.txtScore.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // enemyTwo
-            // 
-            this.enemyTwo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.enemyTwo.Location = new System.Drawing.Point(285, 232);
-            this.enemyTwo.Name = "enemyTwo";
-            this.enemyTwo.Size = new System.Drawing.Size(30, 40);
-            this.enemyTwo.TabIndex = 43;
-            this.enemyTwo.TabStop = false;
-            this.enemyTwo.Tag = "enemy";
             // 
             // background
             // 
@@ -529,6 +510,26 @@
             this.background.TabStop = false;
             this.background.Tag = "background";
             // 
+            // enemyOne
+            // 
+            this.enemyOne.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.enemyOne.Location = new System.Drawing.Point(464, 242);
+            this.enemyOne.Name = "enemyOne";
+            this.enemyOne.Size = new System.Drawing.Size(30, 40);
+            this.enemyOne.TabIndex = 20;
+            this.enemyOne.TabStop = false;
+            this.enemyOne.Tag = "enemy";
+            // 
+            // enemyTwo
+            // 
+            this.enemyTwo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.enemyTwo.Location = new System.Drawing.Point(280, 242);
+            this.enemyTwo.Name = "enemyTwo";
+            this.enemyTwo.Size = new System.Drawing.Size(30, 40);
+            this.enemyTwo.TabIndex = 43;
+            this.enemyTwo.TabStop = false;
+            this.enemyTwo.Tag = "enemy";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -536,6 +537,8 @@
             this.BackColor = System.Drawing.Color.LightBlue;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(691, 588);
+            this.Controls.Add(this.enemyTwo);
+            this.Controls.Add(this.txtScore);
             this.Controls.Add(this.pictureBox14);
             this.Controls.Add(this.pictureBox13);
             this.Controls.Add(this.pictureBox12);
@@ -573,8 +576,6 @@
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.txtScore);
-            this.Controls.Add(this.enemyTwo);
             this.Controls.Add(this.background);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -608,7 +609,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox18)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.door)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.enemyOne)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
@@ -617,8 +617,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.enemyTwo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.background)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyOne)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.enemyTwo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -654,7 +655,6 @@
         private System.Windows.Forms.PictureBox pictureBox18;
         private System.Windows.Forms.PictureBox door;
         private System.Windows.Forms.PictureBox player;
-        private System.Windows.Forms.PictureBox enemyOne;
         private System.Windows.Forms.PictureBox pictureBox8;
         private System.Windows.Forms.PictureBox pictureBox6;
         private System.Windows.Forms.PictureBox pictureBox5;
@@ -664,9 +664,10 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label txtScore;
-        private System.Windows.Forms.PictureBox enemyTwo;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.PictureBox background;
+        private System.Windows.Forms.PictureBox enemyOne;
+        private System.Windows.Forms.PictureBox enemyTwo;
     }
 }
 
