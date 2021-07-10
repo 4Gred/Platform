@@ -12,8 +12,8 @@ namespace NewGame
 {
     public partial class Form1 : Form
     {
-        Image playerImageRun, playerImageIdle, playerImageJump;
-        private bool LeftSide;
+        Image playerImageRun, playerImageIdle, playerImageJump, enemyOneImageRun, enemyTwoImageRun;
+        private bool LeftSide, enemyOneLeft = true, enemyOneRight = false, enemyTwoLeft = true, enemyTwoRight = false;
         bool goLeft, goRight, jumping, isGameOver;
         private int PressedKey = 0;
         private int currFrame = 0;
@@ -22,16 +22,23 @@ namespace NewGame
         int jumpSpeed;
         int force;
         int score = 0;
+        int key = 0;
         int playerSpeed = 7;
         int backgroundSpeed = 8;
         int horizontalSpeed = 5;
         int verticalSpeed = 3;
         int enemyOneSpeed = 5;
         int enemyTwoSpeed = 3;
+        int gilTopSpeed = 1;
+        int gilBottomSpeed = 1;
+        private int currFrameEnemy = 0;
+
         public Form1()
         {
             InitializeComponent();
             playerImageRun = new Bitmap("D:\\Programs\\Platform\\Platform\\Sprite\\Woodcutter\\Woodcutter_run.png");
+            enemyOneImageRun = new Bitmap("D:\\Programs\\Platform\\Platform\\Sprite\\SteamMan\\SteamMan_run.png");
+            enemyTwoImageRun = new Bitmap("D:\\Programs\\Platform\\Platform\\Sprite\\GraveRobber\\GraveRobber_run.png");
             playerImageIdle = new Bitmap("D:\\Programs\\Platform\\Platform\\Sprite\\Woodcutter\\Woodcutter_idle.png");
             playerImageJump = new Bitmap("D:\\Programs\\Platform\\Platform\\Sprite\\Woodcutter\\Woodcutter_jump.png");
             timer1.Interval = 50;
@@ -39,6 +46,10 @@ namespace NewGame
             timer1.Start();
             this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             player.BackColor = Color.Transparent;
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            enemyOne.BackColor = Color.Transparent;
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            enemyTwo.BackColor = Color.Transparent;
 
         }
 
@@ -53,7 +64,7 @@ namespace NewGame
                 {
                     playAnimationJump();
                 }
-                if (currFrame >4)
+                if (currFrame > 4)
                     currFrame = 0;
             }
             else
@@ -121,7 +132,7 @@ namespace NewGame
             playAnimationIdle();
             player.Top += jumpSpeed;
             if (goLeft == true && player.Left > 48)
-            {              
+            {
                 player.Left -= playerSpeed;
             }
             if (goRight == true && player.Left + (player.Width + 48) < this.ClientSize.Width)
@@ -154,7 +165,7 @@ namespace NewGame
                 background.Left -= backgroundSpeed;
                 MoveGameElements("back");
 
-            }          
+            }
             foreach (Control x in this.Controls)
             {
                 if (x is PictureBox)
@@ -173,14 +184,9 @@ namespace NewGame
                             {
                                 player.Left -= horizontalSpeed;
                             }
-
-
                         }
-
                         x.BringToFront();
-
                     }
-
                     if ((string)x.Tag == "coin")
                     {
                         if (player.Bounds.IntersectsWith(x.Bounds) && x.Visible == true)
@@ -189,8 +195,21 @@ namespace NewGame
                             score++;
                         }
                     }
-
-
+                    if ((string)x.Tag == "fake")
+                    {
+                        if (player.Bounds.IntersectsWith(x.Bounds) && x.Visible == true)
+                        {
+                            x.Visible = false;
+                        }
+                    }
+                    if ((string)x.Tag == "key")
+                    {
+                        if (player.Bounds.IntersectsWith(x.Bounds) && x.Visible == true)
+                        {
+                            x.Visible = false;
+                            key++;
+                        }
+                    }
                     if ((string)x.Tag == "enemy")
                     {
                         if (player.Bounds.IntersectsWith(x.Bounds))
@@ -199,48 +218,99 @@ namespace NewGame
                             isGameOver = true;
                             txtScore.Text = "Score: " + score + MessageBox.Show("Вы убиты!");
                         }
-                    }                                   
+                    }
                 }
-
-            }         
-            horizontalPlatform.Left -= horizontalSpeed;
-
-            if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
-            {
-                horizontalSpeed = -horizontalSpeed;
             }
+            /* horizontalPlatform.Left -= horizontalSpeed;
+
+             if (horizontalPlatform.Left < 0 || horizontalPlatform.Left + horizontalPlatform.Width > this.ClientSize.Width)
+             {
+                 horizontalSpeed = -horizontalSpeed;
+             }*/
 
             verticalPlatform.Top += verticalSpeed;
-
-            if (verticalPlatform.Top < 195 || verticalPlatform.Top > 581)
+            if (verticalPlatform.Top < 467 || verticalPlatform.Top > 647)
             {
                 verticalSpeed = -verticalSpeed;
             }
+            gil1.Top += gilTopSpeed;           
+            gil3.Top += gilTopSpeed;           
+            gil6.Top += gilTopSpeed;
 
-
-          /*  enemyOne.Left -= enemyOneSpeed;
-
-            if (enemyOne.Left < pictureBox5.Left || enemyOne.Left + enemyOne.Width > pictureBox5.Left + pictureBox5.Width)
+            if (gil1.Top > 65)
             {
+                gilTopSpeed = -gilTopSpeed;
+                if (gil1.Location.Y > -65)
+                {
+                    gil1.Visible = false;
+                    gil3.Visible = false;
+                    gil6.Visible = false;
+
+                }
+            }
+            if (gil1.Top < 100)
+            {
+                gilTopSpeed = -gilTopSpeed;
+                if (gil1.Location.Y < 85)
+                {
+                    gil1.Visible = true;
+                    gil3.Visible = true;
+                    gil6.Visible = true;
+
+                }
+            }
+            gil2.Top += gilBottomSpeed;
+            gil4.Top += gilBottomSpeed;
+            gil5.Top += gilBottomSpeed;
+            gil2.Visible = true;
+            gil4.Visible = true;
+            gil5.Visible = true;
+            if (gil2.Top < -20 || gil2.Top > 10)
+            {
+                gilBottomSpeed = -gilBottomSpeed;
+                if (gil2.Top > -11)
+                {
+                    gil2.Visible = false;
+                    gil4.Visible = false;
+                    gil5.Visible = false;
+                }
+                if (gil2.Top < -11)
+                {
+                    gil2.Visible = true;
+                    gil4.Visible = true;
+                    gil5.Visible = true;
+                }
+            }
+            playEnemyOneAnimationRun();
+            enemyOne.Left -= enemyOneSpeed;
+            if (enemyOne.Left < pictureBox3.Left || enemyOne.Left + enemyOne.Width > pictureBox3.Left + pictureBox3.Width)
+            {
+                playEnemyOneAnimationRun();
+                enemyOneLeft = false;
+                enemyOneRight = true;
+                currFrameEnemy++;
                 enemyOneSpeed = -enemyOneSpeed;
             }
-
+            playEnemyTwoAnimationRun();
             enemyTwo.Left += enemyTwoSpeed;
-
-            if (enemyTwo.Left < pictureBox2.Left || enemyTwo.Left + enemyTwo.Width > pictureBox2.Left + pictureBox2.Width)
+            if (enemyTwo.Left < pictureBox19.Left || enemyTwo.Left + enemyTwo.Width > pictureBox19.Left + pictureBox19.Width)
             {
+                playEnemyTwoAnimationRun();
+                enemyTwoLeft = false;
+                enemyTwoRight = true;
                 enemyTwoSpeed = -enemyTwoSpeed;
-            }*/
-
-
+            }
+            if (currFrameEnemy == 4)
+            {
+                currFrameEnemy = 0;
+            }
             if (player.Top + player.Height > this.ClientSize.Height + 60)
             {
                 gameTimer.Stop();
                 isGameOver = true;
                 txtScore.Text = "Score: " + score + MessageBox.Show("Вы мертвы!");
             }
-
-            if (player.Bounds.IntersectsWith(door.Bounds) && score > 1)
+            if (player.Bounds.IntersectsWith(door.Bounds) && score > 1 && key == 1)
             {
                 gameTimer.Stop();
                 isGameOver = true;
@@ -253,7 +323,6 @@ namespace NewGame
         }
         private void RestartGame()
         {
-
             jumping = false;
             goLeft = false;
             goRight = false;
@@ -262,14 +331,13 @@ namespace NewGame
             txtScore.Text = "Score: " + score;
             Form1 newWindow = new Form1();
             newWindow.Show();
-            this.Hide();           
+            this.Hide();
         }
         private void MoveGameElements(string direction)
         {
-
             foreach (Control x in this.Controls)
             {
-                if (x is PictureBox && (string)x.Tag == "platform" || x is PictureBox && (string)x.Tag == "coin" || x is PictureBox && (string)x.Tag == "door" || x is PictureBox && (string)x.Tag == "enemy")
+                if (x is PictureBox && (string)x.Tag == "platform" || x is PictureBox && (string)x.Tag == "fake" || x is PictureBox && (string)x.Tag == "coin" || x is PictureBox && (string)x.Tag == "door" || x is PictureBox && (string)x.Tag == "enemy" || x is PictureBox && (string)x.Tag == "environment" || x is PictureBox && (string)x.Tag == "key")
                 {
 
                     if (direction == "back")
@@ -280,12 +348,10 @@ namespace NewGame
                     {
                         x.Left += backgroundSpeed;
                     }
-
-
                 }
             }
         }
-            private void playAnimationIdle()
+        private void playAnimationIdle()
         {
             if (currAnimation == 0)
             {
@@ -323,6 +389,48 @@ namespace NewGame
                 part.RotateFlip(RotateFlipType.RotateNoneFlipX);
                 player.Size = new Size(48, 48);
                 player.Image = part;
+
+            }
+        }
+        private void playEnemyOneAnimationRun()
+        {
+            if (enemyOneLeft)
+            {
+                Image part = new Bitmap(48, 48);
+                Graphics g = Graphics.FromImage(part);
+                g.DrawImage(enemyOneImageRun, 0, 0, new Rectangle(new Point(48 * currFrameEnemy, 0), new Size(48, 48)), GraphicsUnit.Pixel);
+                enemyOne.Size = new Size(48, 48);
+                enemyOne.Image = part;
+            }
+            if (enemyOneRight)
+            {
+                Image part = new Bitmap(48, 48);
+                Graphics g = Graphics.FromImage(part);
+                g.DrawImage(enemyOneImageRun, 0, 0, new Rectangle(new Point(48 * currFrameEnemy, 0), new Size(48, 48)), GraphicsUnit.Pixel);
+                part.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                enemyOne.Size = new Size(48, 48);
+                enemyOne.Image = part;
+
+            }
+        }
+        private void playEnemyTwoAnimationRun()
+        {
+            if (enemyTwoLeft)
+            {
+                Image part = new Bitmap(48, 48);
+                Graphics g = Graphics.FromImage(part);
+                g.DrawImage(enemyTwoImageRun, 0, 0, new Rectangle(new Point(48 * currFrameEnemy, 0), new Size(48, 48)), GraphicsUnit.Pixel);
+                enemyTwo.Size = new Size(48, 48);
+                enemyTwo.Image = part;
+            }
+            if (enemyTwoRight)
+            {
+                Image part = new Bitmap(48, 48);
+                Graphics g = Graphics.FromImage(part);
+                g.DrawImage(enemyTwoImageRun, 0, 0, new Rectangle(new Point(48 * currFrameEnemy, 0), new Size(48, 48)), GraphicsUnit.Pixel);
+                part.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                enemyTwo.Size = new Size(48, 48);
+                enemyTwo.Image = part;
 
             }
         }
