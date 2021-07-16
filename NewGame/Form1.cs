@@ -8,11 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net;
 
 namespace NewGame
 {
     public partial class Form1 : Form
     {
+
         Image playerImageRun, playerImageIdle, playerImageJump, enemyOneImageRun, enemyTwoImageRun;
         private bool LeftSide, enemyOneLeft = true, enemyOneRight = false, enemyTwoLeft = true, enemyTwoRight = false;
         bool goLeft, goRight, jumping, isGameOver;
@@ -34,8 +36,6 @@ namespace NewGame
         int gilBottomSpeed = 1;
         private int currFrameEnemy = 0;
 
-
-
         public class Save
         {
             public int X;
@@ -47,28 +47,43 @@ namespace NewGame
                 Y = _y;
             }
         }
+        public class InvSave
+        {
+            public int KEY;
+            public int COIN;
+
+            public InvSave(int _key, int _coin)
+            {
+                KEY = _key;
+                COIN = _coin;
+            }
+        }
         public Form1()
         {
-
             InitializeComponent();
+            this.DoubleBuffered = true;
             playerImageRun = new Bitmap("D:\\Programs\\Platform\\Platform\\Sprite\\Woodcutter\\Woodcutter_run.png");
             enemyOneImageRun = new Bitmap("D:\\Programs\\Platform\\Platform\\Sprite\\SteamMan\\SteamMan_run.png");
             enemyTwoImageRun = new Bitmap("D:\\Programs\\Platform\\Platform\\Sprite\\GraveRobber\\GraveRobber_run.png");
             playerImageIdle = new Bitmap("D:\\Programs\\Platform\\Platform\\Sprite\\Woodcutter\\Woodcutter_idle.png");
             playerImageJump = new Bitmap("D:\\Programs\\Platform\\Platform\\Sprite\\Woodcutter\\Woodcutter_jump.png");
-            timer1.Interval = 100;
+            timer1.Interval = 20;
             timer1.Tick += new EventHandler(update);
             timer1.Start();
             this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             player.BackColor = Color.Transparent;
             enemyOne.BackColor = Color.Transparent;
             enemyTwo.BackColor = Color.Transparent;
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
         }
         private void update(object sender, EventArgs e)
         {
-            timer1.Interval = 100;
+            for (int i = 0; i < 1; i++)
+            {
+                playAnimation(5);
+                i = 0;
+            }
+            timer1.Interval = 20;
             if (PressedKey == 1)
             {
                 currFrameIdle = 0;
@@ -92,10 +107,12 @@ namespace NewGame
         private void KeyIsDown(object sender, KeyEventArgs e)
         {
             List<Save> saves = new List<Save>();
-            string path = @"D:\Programs\Platform\Platform\NewGame\Saves\saves.bin";
+            List<InvSave> invSave = new List<InvSave>();
+            string pathSave = @"D:\Programs\Platform\Platform\NewGame\Saves\saves.bin";
+            string pathInvSave = @"D:\Programs\Platform\Platform\NewGame\Saves\invSaves.bin";
             currFrameIdle = 0;
             PressedKey = 1;
-            
+
             if (e.KeyCode == Keys.Left)
             {
                 LeftSide = true;
@@ -118,32 +135,67 @@ namespace NewGame
                 saves.Add(new Save(player.Location.X, player.Location.Y));
                 saves.Add(new Save(enemyOne.Location.X, enemyOne.Location.Y));
                 saves.Add(new Save(enemyTwo.Location.X, enemyTwo.Location.Y));
-                BinaryWriter writer = new BinaryWriter(new FileStream(path, FileMode.Open));
+                saves.Add(new Save(gil1.Location.X, gil1.Location.Y));
+                saves.Add(new Save(gil2.Location.X, gil2.Location.Y));
+                saves.Add(new Save(gil3.Location.X, gil3.Location.Y));
+                saves.Add(new Save(gil4.Location.X, gil4.Location.Y));
+                saves.Add(new Save(gil5.Location.X, gil5.Location.Y));
+                saves.Add(new Save(gil6.Location.X, gil6.Location.Y));
+                invSave.Add(new InvSave(key, score));
+                BinaryWriter writer = new BinaryWriter(new FileStream(pathSave, FileMode.Open));
+                BinaryWriter invWriter = new BinaryWriter(new FileStream(pathInvSave, FileMode.Open));
                 for (int i = 0; i < saves.Count; i++)
                 {
                     writer.Write(saves[i].X);
-                    writer.Write(saves[i].Y);                    
+                    writer.Write(saves[i].Y);
+                }
+                for (int i = 0; i < invSave.Count; i++)
+                {
+                    invWriter.Write(invSave[i].KEY);
+                    invWriter.Write(invSave[i].COIN);
                 }
                 writer.Flush();
                 writer.Close();
+                invWriter.Flush();
+                invWriter.Close();
             }
             if (e.KeyCode == Keys.F2)
             {
-                BinaryReader reader = new BinaryReader(new FileStream(path, FileMode.Open));
-                while (reader.BaseStream.Position < reader.BaseStream.Length)
+                BinaryReader Savereader = new BinaryReader(new FileStream(pathSave, FileMode.OpenOrCreate));
+                BinaryReader InvSavereader = new BinaryReader(new FileStream(pathInvSave, FileMode.OpenOrCreate));
+                while (Savereader.BaseStream.Position < Savereader.BaseStream.Length)
                 {
-                    int X = reader.ReadInt32();
-                    int Y = reader.ReadInt32();
+                    int X = Savereader.ReadInt32();
+                    int Y = Savereader.ReadInt32();
                     Save loads = new Save(X, Y);
                     saves.Add(loads);
                 }
-                reader.Close();               
+                while (InvSavereader.BaseStream.Position < InvSavereader.BaseStream.Length)
+                {
+                    int KEY = InvSavereader.ReadInt32();
+                    int COIN = InvSavereader.ReadInt32();
+                    InvSave invLoad = new InvSave(KEY, COIN);
+                    invSave.Add(invLoad);
+                }
+                Savereader.Close();
+                InvSavereader.Close();
                 player.Location = new Point(saves[0].X, saves[0].Y);
                 enemyOne.Location = new Point(saves[1].X, saves[1].Y);
                 enemyTwo.Location = new Point(saves[2].X, saves[2].Y);
-            }          
+                gil1.Location = new Point(saves[3].X, saves[3].Y);
+                gil2.Location = new Point(saves[4].X, saves[4].Y);
+                gil3.Location = new Point(saves[5].X, saves[5].Y);
+                gil4.Location = new Point(saves[6].X, saves[6].Y);
+                gil5.Location = new Point(saves[7].X, saves[7].Y);
+                gil6.Location = new Point(saves[8].X, saves[8].Y);
+                key = invSave[0].KEY;
+                score = invSave[0].COIN;
+                if (key == 1)
+                {
+                    pictureBox15.Visible = false;
+                }
+            }
         }
-
         private void KeyIsUp(object sender, KeyEventArgs e)
         {
             PressedKey = 0;
@@ -166,20 +218,17 @@ namespace NewGame
             {
                 RestartGame();
             }
-
-
         }
-
         private void MainGame(object sender, EventArgs e)
         {
             txtScore.Text = "Score: " + score;
             playAnimation(0);
             player.Top += jumpSpeed;
-            if (goLeft == true && player.Left > 48)
+            if (goLeft == true && player.Left > 0)
             {
                 player.Left -= playerSpeed;
             }
-            if (goRight == true && player.Left + (player.Width + 48) < this.ClientSize.Width)
+            if (goRight == true && player.Left + (player.Width) < this.ClientSize.Width)
             {
                 player.Left += playerSpeed;
             }
@@ -198,16 +247,16 @@ namespace NewGame
             {
                 jumpSpeed = 10;
             }
-            //if (goLeft && background.Left < 0)
-            //{
-            //    background.Left += backgroundSpeed;
-            //    MoveGameElements("forward");
-            //}
-            //if (goRight && background.Left > -641)
-            //{
-            //    background.Left -= backgroundSpeed;
-            //    MoveGameElements("back");
-            //}
+            if (goLeft && background.Left < 0)
+            {
+                background.Left += backgroundSpeed;
+                MoveGameElements("forward");
+            }
+            if (goRight && background.Left > -641)
+            {
+                background.Left -= backgroundSpeed;
+                MoveGameElements("back");
+            }
             foreach (Control x in this.Controls)
             {
                 if (x is PictureBox)
@@ -332,7 +381,7 @@ namespace NewGame
                 isGameOver = true;
                 txtScore.Text = "Score: " + score + MessageBox.Show("Вы мертвы!");
             }
-            if (player.Bounds.IntersectsWith(door.Bounds) && score > 1 && key == 1)
+            if (player.Bounds.IntersectsWith(door.Bounds) && score >= 1 && key == 1)
             {
                 gameTimer.Stop();
                 isGameOver = true;
@@ -361,7 +410,7 @@ namespace NewGame
             {
                 if (x is PictureBox && (string)x.Tag == "platform" || x is PictureBox && (string)x.Tag == "fake" || x is PictureBox && (string)x.Tag == "coin" || x is PictureBox && (string)x.Tag == "door" || x is PictureBox && (string)x.Tag == "enemy" || x is PictureBox && (string)x.Tag == "environment" || x is PictureBox && (string)x.Tag == "key")
                 {
-
+                    this.DoubleBuffered = true;
                     if (direction == "back")
                     {
                         x.Left -= backgroundSpeed;
@@ -370,12 +419,20 @@ namespace NewGame
                     {
                         x.Left += backgroundSpeed;
                     }
+                    if (direction == "Top")
+                    {
+                        x.Left -= backgroundSpeed;
+                    }
+                    if (direction == "Bottom")
+                    {
+                        x.Left -= backgroundSpeed;
+                    }
                 }
             }
         }
         private void playAnimation(int x)
         {
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.DoubleBuffered = true;
             Image part = new Bitmap(48, 48);
             Graphics g = Graphics.FromImage(part);
             switch (x)
@@ -449,6 +506,11 @@ namespace NewGame
                         g.DrawImage(enemyTwoImageRun, 0, 0, new Rectangle(new Point(48 * currFrameEnemy, 0), new Size(48, 48)), GraphicsUnit.Pixel);
                         part.RotateFlip(RotateFlipType.RotateNoneFlipX);
                     }
+                    break;
+                case 5://bigSaw
+                    Image flipImage = saw.Image;
+                    flipImage.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                    saw.Image = flipImage;
                     break;
             }
         }
